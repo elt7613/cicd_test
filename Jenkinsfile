@@ -1,49 +1,40 @@
 pipeline {
-   agent any
+  agent any
 
   stages {
     stage('Checkout') {
-      steps { checkout scm }
+      steps {
+        checkout scm
+      }
     }
     
-    stage('Env  setup') {
+    stage('Env setup') {
       steps {
-        sh '''
-          python3 -m venv .venv
-          source .venv/bin/activate
-        '''
+        sh 'python3 -m venv .venv'
       }
     }
-    stage('Requirement install') {
+
+    stage('Install requirements') {
       steps {
-        sh '''
-          source .venv/bin/activate
-          pip install -r requirements.txt
-        '''
+        sh '.venv/bin/pip install -r requirements.txt'
       }
     }
-    stage('Migrate') {
-      steps {
-        sh '''
-          source .venv/bin/activate
-          python manage.py migrate
-        '''
-      }
-    }
+
     stage('Make migrations') {
       steps {
-        sh '''
-          source .venv/bin/activate
-          python manage.py makemigrations
-        '''
+        sh '.venv/bin/python manage.py makemigrations'
       }
     }
+
+    stage('Migrate') {
+      steps {
+        sh '.venv/bin/python manage.py migrate'
+      }
+    }
+
     stage('Test') {
       steps {
-        sh '''
-          source .venv/bin/activate
-          python test.py
-        '''
+        sh '.venv/bin/python test.py'
       }
     }
   }
