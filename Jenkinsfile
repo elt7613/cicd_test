@@ -37,5 +37,11 @@ pipeline {
         sh '.venv/bin/python test.py'
       }
     }
+
+    stage('Run') {
+      steps {
+        sh '.venv/bin/python manage.py runserver 0.0.0.0:8457'
+      }
+    }
   }
 }
