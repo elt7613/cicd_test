@@ -2,7 +2,7 @@ import requests
 import os
 
 # API endpoint
-url = "http://127.0.0.1:8457/api/candidates/"
+url = "http://127.0.0.1:8000/api/candidates/"
 
 # Candidate data
 data = {
@@ -18,7 +18,7 @@ data = {
 }
 
 # Path to resume file
-resume_path = "download.pdf"   # <-- change to your test file
+resume_path = "STR-Order-ORD-20250904-B8F12-receipt (1).pdf"   # <-- change to your test file
 
 # Check if file exists before sending
 if not os.path.isfile(resume_path):
@@ -32,8 +32,12 @@ with open(resume_path, "rb") as resume_file:
     response = requests.post(url, data=data, files=files)
 
 # Print results
+print("\n\n\n")
 print("Status Code:", response.status_code)
 try:
+    print("\n\n\n")
     print("Response JSON:", response.json())
 except Exception:
+    print("\n\n\n")
     print("Response Text:", response.text)
+print("\n\n\n")

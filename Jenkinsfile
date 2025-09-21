@@ -1,13 +1,19 @@
 pipeline {
   agent any
 
+  environment {
+    REMOTE_USER = "youruser"
+    REMOTE_HOST = "your.server.com"
+    REMOTE_PATH = "/home/youruser/app"
+  }
+
   stages {
     stage('Checkout') {
       steps {
         checkout scm
       }
     }
-    
+
     stage('Env setup') {
       steps {
         sh 'python3 -m venv .venv'
@@ -20,27 +26,29 @@ pipeline {
       }
     }
 
-    stage('Make migrations') {
+    stage('Migrations') {
       steps {
         sh '.venv/bin/python manage.py makemigrations'
-      }
-    }
-
-    stage('Migrate') {
-      steps {
         sh '.venv/bin/python manage.py migrate'
       }
     }
 
-    stage('Test') {
+    stage('Unit Tests') {
       steps {
-        sh '.venv/bin/python test.py'
+        sh '.venv/bin/python manage.py test'
       }
     }
 
-    stage('Test 2') {
+    stage('Start Server') {
       steps {
-        sh '.venv/bin/python manage.py test'
+        sh '.venv/bin/python manage.py runserver 0.0.0.0:8000 &'
+        sh 'sleep 5' // wait for server to boot
+      }
+    }
+
+    stage('API Test') {
+      steps {
+        sh '.venv/bin/python check.py'
       }
     }
   }
