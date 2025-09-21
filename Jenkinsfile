@@ -46,7 +46,7 @@ pipeline {
 
     stage('Test 2') {
       steps {
-        sh '.venv/bin/python jobs/check.py'
+        sh '.venv/bin/python check.py'
       }
     }
   }
