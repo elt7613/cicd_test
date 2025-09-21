@@ -38,15 +38,9 @@ pipeline {
       }
     }
 
-    stage('Run server') {
-      steps {
-        sh 'nohup .venv/bin/python manage.py runserver 0.0.0.0:8457 &'
-      }
-    }
-
     stage('Test 2') {
       steps {
-        sh '.venv/bin/python check.py'
+        sh '.venv/bin/python manage.py test'
       }
     }
   }

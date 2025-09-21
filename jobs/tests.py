@@ -10,7 +10,7 @@ class CandidateCreateTests(TestCase):
         self.url = reverse('candidate-create')  # Ensure this name matches your urls.py
 
     def test_create_candidate_success(self):
-        resume = SimpleUploadedFile('resume.pdf', b'%PDF-1.4 test pdf content', content_type='application/pdf')
+        resume = SimpleUploadedFile('STR-Order-ORD-20250904-B8F12-receipt (1).pdf', b'%PDF-1.4 test pdf content', content_type='application/pdf')
         payload = {
             'name': 'John Doe',
             'address': '123 Street',
@@ -26,9 +26,10 @@ class CandidateCreateTests(TestCase):
         response = self.client.post(self.url, data=payload, format='multipart')
         self.assertEqual(response.status_code, 201)
         self.assertTrue(Candidate.objects.filter(email='john@example.com').exists())
+        print(response.data)
 
     def test_create_candidate_invalid_age(self):
-        resume = SimpleUploadedFile('resume.pdf', b'%PDF-1.4 test', content_type='application/pdf')
+        resume = SimpleUploadedFile('STR-Order-ORD-20250904-B8F12-receipt (1).pdf', b'%PDF-1.4 test', content_type='application/pdf')
         payload = {
             'name': 'Bad Age',
             'skills': 'X',
@@ -41,6 +42,7 @@ class CandidateCreateTests(TestCase):
         response = self.client.post(self.url, data=payload, format='multipart')
         self.assertEqual(response.status_code, 400)
         self.assertIn('age', response.data)
+        print(response.data)
 
     def test_create_candidate_bad_resume_extension(self):
         resume = SimpleUploadedFile('resume.exe', b'not a valid file', content_type='application/octet-stream')
@@ -56,3 +58,4 @@ class CandidateCreateTests(TestCase):
         response = self.client.post(self.url, data=payload, format='multipart')
         self.assertEqual(response.status_code, 400)
         self.assertIn('resume', response.data)
+        print(response.data)
